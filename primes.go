@@ -1,7 +1,7 @@
 // Let's learn how to caluculate prime numbers
 //Then, let's do that with multi-threading!
 
-package main
+package primes
 
 import (
 	"fmt"
@@ -9,31 +9,46 @@ import (
 )
 
 func main() {
-	var largestNumber int = 100
+	var largestNumber int = 1000
+	wa := BuildWorkArray(largestNumber)
+	primes := Eratosthenes(wa)
+	fmt.Printf("the following are all of the prime numbers %d or less: \n", largestNumber)
+	for i := range primes {
+		if i < len(primes)-1 {
+			fmt.Printf("%d, ", primes[i])
+		} else {
+			fmt.Printf("%d\n", primes[i])
+		}
+	}
+}
 
-	wa := buildWorkArray(largestNumber)
+func Eratosthenes(wa []Number) []int {
 	for i := range wa {
 		if wa[i].prime == true {
 			coefficient := 0
-			for j := wa[i].value; j <= largestNumber; j++ {
+			for j := wa[i].value; j <= len(wa)+1; j++ {
 				adder := wa[i].value * coefficient
-				fmt.Printf("i = %d, j = %d, adder = %d \n", wa[i].value, j, adder)
 				potential := int(math.Pow(float64(wa[i].value), 2)) + adder
 				if j == potential {
-					fmt.Printf("Match, %d is a multiple of %d\n", potential, wa[i].value)
 					wa[j-2].prime = false
 					coefficient++
 				}
 			}
 		}
 	}
-	printSlice(wa)
+	var primes []int
+	for i := range wa {
+		if wa[i].prime == true {
+			primes = append(primes, wa[i].value)
+		}
+	}
+	return primes
 }
 
-func buildWorkArray(highestValue int) []number {
-	var workArray []number
+func BuildWorkArray(highestValue int) []Number {
+	var workArray []Number
 	for i := 2; i <= highestValue; i++ {
-		var val number
+		var val Number
 		val.value = i
 		val.prime = true
 		workArray = append(workArray, val)
@@ -41,11 +56,11 @@ func buildWorkArray(highestValue int) []number {
 	return workArray
 }
 
-func printSlice(s []number) {
+func printSlice(s []int) {
 	fmt.Printf("\nlen = %d cap=%d %v\n", len(s), cap(s), s)
 }
 
-type number struct {
+type Number struct {
 	value int
 	prime bool
 }
