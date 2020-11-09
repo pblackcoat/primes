@@ -1,7 +1,7 @@
 // Let's learn how to caluculate prime numbers
 //Then, let's do that with multi-threading!
 
-package primes
+package main
 
 import (
 	"fmt"
@@ -10,8 +10,8 @@ import (
 
 func main() {
 	var largestNumber int = 1000
-	wa := BuildWorkArray(largestNumber)
-	primes := Eratosthenes(wa)
+	wa := buildWorkArray(largestNumber)
+	primes := eratosthenes(wa)
 	fmt.Printf("the following are all of the prime numbers %d or less: \n", largestNumber)
 	for i := range primes {
 		if i < len(primes)-1 {
@@ -22,18 +22,10 @@ func main() {
 	}
 }
 
-func Eratosthenes(wa []Number) []int {
+func eratosthenes(wa []number) []int {
 	for i := range wa {
 		if wa[i].prime == true {
-			coefficient := 0
-			for j := wa[i].value; j <= len(wa)+1; j++ {
-				adder := wa[i].value * coefficient
-				potential := int(math.Pow(float64(wa[i].value), 2)) + adder
-				if j == potential {
-					wa[j-2].prime = false
-					coefficient++
-				}
-			}
+			sieve(wa, wa[i].value)
 		}
 	}
 	var primes []int
@@ -45,10 +37,23 @@ func Eratosthenes(wa []Number) []int {
 	return primes
 }
 
-func BuildWorkArray(highestValue int) []Number {
-	var workArray []Number
+func sieve(wa []number, filter int) []number {
+	coefficient := 0
+	for j := filter; j <= len(wa)+1; j++ {
+		adder := filter * coefficient
+		potential := int(math.Pow(float64(filter), 2)) + adder
+		if j == potential {
+			wa[j-2].prime = false
+			coefficient++
+		}
+	}
+	return wa
+}
+
+func buildWorkArray(highestValue int) []number {
+	var workArray []number
 	for i := 2; i <= highestValue; i++ {
-		var val Number
+		var val number
 		val.value = i
 		val.prime = true
 		workArray = append(workArray, val)
@@ -60,7 +65,7 @@ func printSlice(s []int) {
 	fmt.Printf("\nlen = %d cap=%d %v\n", len(s), cap(s), s)
 }
 
-type Number struct {
+type number struct {
 	value int
 	prime bool
 }
