@@ -29,3 +29,19 @@ func BenchmarkSieve(b *testing.B) {
 		sieve(big, 2)
 	}
 }
+
+func BenchmarkErostethenes(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		wa := buildWorkArray(1000)
+		b.ResetTimer()
+		eratosthenes(wa)
+	}
+}
+
+func BenchmarkErostethenesGr(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		wa := buildWorkArray(1000)
+		b.ResetTimer()
+		eratosthenesGr(wa)
+	}
+}

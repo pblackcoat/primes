@@ -9,9 +9,9 @@ import (
 )
 
 func main() {
-	var largestNumber int = 1000
+	var largestNumber int = 726000
 	wa := buildWorkArray(largestNumber)
-	primes := eratosthenes(wa)
+	primes := eratosthenesGr(wa)
 	fmt.Printf("the following are all of the prime numbers %d or less: \n", largestNumber)
 	for i := range primes {
 		if i < len(primes)-1 {
@@ -26,6 +26,21 @@ func eratosthenes(wa []number) []int {
 	for i := range wa {
 		if wa[i].prime == true {
 			sieve(wa, wa[i].value)
+		}
+	}
+	var primes []int
+	for i := range wa {
+		if wa[i].prime == true {
+			primes = append(primes, wa[i].value)
+		}
+	}
+	return primes
+}
+
+func eratosthenesGr(wa []number) []int {
+	for i := range wa {
+		if wa[i].prime == true {
+			go sieve(wa, wa[i].value)
 		}
 	}
 	var primes []int
